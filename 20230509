@@ -1,0 +1,71 @@
+# 5월 4일 학습내용
+## Python ROS 코드
+- ```#!/usr/bin/python``` : 어떤 파이선으로 실행할 것인지
+- ```#-*- coding: utf-8 -*-```	: 인코딩 지정
+- ```if __name__ == "__main__":```
+  > - __name__은 python 파일의 이름이며 직접 실행한 코드는 __main__이라는 이름을 가지므로, 이 피일을 실행할 때만 동작하도록 if문을 설정한 것
+  > - 다른 코드에서 import해서 사용하려면 ```if __name__ == "py_publisher.py"``` 이런 식으로 해야 됨
+- 코드 작성 이후 CMakeLists.txt 변경
+  ```
+  catkin_install_python(PROGRAMS
+    scripts/my_python_script
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  )
+  ```
+  ->
+  ```
+  catkin_install_python(PROGRAMS
+    scripts/py_second_pub.py scripts/py_second_sub.py
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  )
+  ```
+  와 같이 수정할 것
+
+## ROS 통신의 특징
+### 언어와 상관 없이 통신이 이루어진다.
+```
+rosrun topic_tutorial py_publisher.py
+rosrun topic_tutorial py_subscriber.py
+
+rosrun topic_tutorial my_publisher
+rosrun topic_tutorial py_subscriber.py
+```
+이런 식으로 C++와 Python을 섞어서 사용 가능
+
+### ROS 통신 방식
+1. 마스터는 노드들의 정보를 받고 초기 연결
+2. 실제 연결은 마스터를 통하지 않음
+3. 퍼블리셔와 서브스크라이버가 직접 연결
+4. 따라서 마스터가 해제되어도 연결은 지속 됨
+
+### 그래프 사용
+```
+rqt_graph
+```
+현재 이루어지고 있는 통신을 그림으로 보여주는 시각화 도구
+
+### 메시지 확인
+```
+rosmsg info std_msgs/Int32
+```
+
+## VS 코드 설정
+### VS 코드 터미널 열기 : Ctrl+`
+
+### ```#include "ros/ros.h"``` 빨간 줄 수정법
+1. QuickFix 클릭
+2. IncludePath 클릭
+3. c_cpp_properties.json 클릭
+4. 
+```
+"includePath": [
+      "${workspaceFolder}/**",
+      "/opt/ros/noetic/include"
+],
+```
+이와 같이 수정
+
+### 키보드 숏컷 추가
+1. 설정(Manage) -> Keyboard shordcuts 
+2. -> Copy Line Up : Shift+Alt+Up
+3. -> Copy Line Down : Shift+Alt+Down
